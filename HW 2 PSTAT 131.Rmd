@@ -1,0 +1,54 @@
+---
+title: "HW2 PSTAT 131"
+output: html_document
+date: "2022-10-07"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidymodels)
+library(tidyverse)
+library(moments)
+ 
+```
+
+```{r}
+aba <-read.csv("abalone.csv", header=TRUE)
+View(aba)
+
+
+```
+
+#1
+
+```{r}
+#adds the age column to the dataset (rigs column +1.5)
+aba$age <- (aba$rings+1.5)
+
+#Barplot of counts of ages of abalone 
+Age_barplot <- ggplot(aba, aes(x=age)) + geom_histogram()
+
+#mean age is 11.43 years
+mean(aba$age)
+
+#variance is 10.40 years
+var(aba$age)
+
+#barplot of counts of abalone age, data is positively skewed
+Age_barplot
+
+```
+
+#2 
+```{r}
+#sets seed
+set.seed(66668888)
+#splits the data with 80% used for training and 20% for testing
+aba_split <- initial_split(aba, prop = 0.80,
+                                strata = age)
+aba_train <- training(aba_split)
+aba_test <- testing(aba_split)
+
+
+
+```
