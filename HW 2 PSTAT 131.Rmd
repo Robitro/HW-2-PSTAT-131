@@ -19,7 +19,7 @@ View(aba)
 
 ```
 
-#1
+##1
 
 ```{r}
 #adds the age column to the dataset (rigs column +1.5)
@@ -39,7 +39,7 @@ Age_barplot
 
 ```
 
-#2 
+##2 
 ```{r}
 #sets seed
 set.seed(66668888)
@@ -53,7 +53,7 @@ aba_test <- testing(aba_split)
 
 ```
 
-#3
+##3
 
 ```{r}
 # cant use rings to predict age as age is just rings with 1.5 added to it
@@ -73,14 +73,14 @@ prep()
 
 ```
 
-#4
+##4
 ```{r}
 #creates our linear regression model
 lm_model <- linear_reg() %>% set_engine("lm")
 
 ```
 
-#5
+##5
 ```{r}
 #creates workflow for our linear regression model 
 lm_wflow <- workflow() %>% 
@@ -89,13 +89,22 @@ lm_wflow <- workflow() %>%
 
 ```
 
-#6
+##6
 ``` {r }
+#female abalone that we wnat to predict age of
 abaF <-data.frame(longest_shell = 0.50, diameter = 0.10, height = 0.30, whole_weight = 4, shucked_weight = 1, viscera_weight = 2, shell_weight = 1, type="F")
 
+#fits our training data to our workflow
 aba_fit <- fit(lm_wflow,aba_train)
-abaF_age <- predict(aba_fit,abaF, type = "numeric")
-abaF$age <- (abaF_age)
+abaF$age <- predict(aba_fit,abaF, type = "numeric")
+
 #predicts the the abalone is 22.14 years old
 View(abaF)
+```
+##7
+```{ r}
+metric_set()
+
+
+
 ```
