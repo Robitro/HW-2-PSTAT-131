@@ -101,10 +101,15 @@ abaF$age <- predict(aba_fit,abaF, type = "numeric")
 #predicts the the abalone is 22.14 years old
 View(abaF)
 ```
-##7
-```{ r}
-metric_set()
+##7 Create a metric set with R^2, RMSE, MAE. Will create a predicted models from testing data and compare to actual observed ages
+``` { r}
 
+aba_metrics <- metric_set(rsq,rmse,mae)
 
+aba_test_pred_age <- predict(aba_fit,aba_test, type = "numeric")
 
+aba_test_final <-bind_cols(aba_test,aba_test_pred_age, id = NULL)
+
+View(aba_test_final)
 ```
+
