@@ -60,13 +60,15 @@ aba_test <- testing(aba_split)
 
 
 #creates our recipe for model
-aba_recipe <- recipe(age ~ type + longest_shell + diameter + height+whole_weight + shucked_weight+ viscera_weight + shell_weight,  data= aba_train) %>%
- step_dummy_multi_choice(all_nominal_predictors()) %>%
-   step_interact(terms = ~ type:shucked_weight)%>%
-   step_interact(terms = ~ longestshell:diameter) %>%     step_interact(terms=  ~ shucked_weight:shell_weight) %>%
-     step_zv(all_numeric_predictors()) %>%
-      step_normalize(all_numeric_predictors()) %>%
-       prep()
+aba_recipe_basic <- recipe(age ~ type + longest_shell + diameter + height+whole_weight + shucked_weight+ viscera_weight + shell_weight,  data= aba_train) %>%
+ step_dummy_multi_choice(all_nominal_predictors()) 
+
+aba_recipe <- aba_recipe_basic %>% step_interact(terms = ~ starts_with("type"):shucked_weight)%>%
+
+step_interact(terms = ~ longest_shell:diameter) %>% step_interact(terms=  ~ shucked_weight:shell_weight) %>%
+step_zv(all_numeric_predictors()) %>%
+step_normalize(all_numeric_predictors()) %>%
+prep()
       
 
 ```
@@ -89,8 +91,11 @@ lm_wflow <- workflow() %>%
 
 #6
 ``` {r }
-abaF <-data.frame(longest_shell = 0.50, diameter = 0.10, height = 0.30, whole_weight = 4, shucked_weight = 1, viscera_weight = 2, shell_weight = 1)
+abaF <-data.frame(longest_shell = 0.50, diameter = 0.10, height = 0.30, whole_weight = 4, shucked_weight = 1, viscera_weight = 2, shell_weight = 1, type="F")
 
-lm_fit <- fit(lm_wflow,aba_train)
-
+aba_fit <- fit(lm_wflow,aba_train)
+abaF_age <- predict(aba_fit,abaF, type = "numeric")
+abaF$age <- (abaF_age)
+#predicts the the abalone is 22.14 years old
+View(abaF)
 ```
