@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidymodels)
 library(tidyverse)
 library(moments)
+library(labelled)
  
 ```
 
@@ -102,14 +103,26 @@ abaF$age <- predict(aba_fit,abaF, type = "numeric")
 View(abaF)
 ```
 ##7 Create a metric set with R^2, RMSE, MAE. Will create a predicted models from testing data and compare to actual observed ages
-``` { r}
+
+``` {r}
 
 aba_metrics <- metric_set(rsq,rmse,mae)
 
 aba_test_pred_age <- predict(aba_fit,aba_test, type = "numeric")
 
+aba_train_pred_age <- predict(aba_fit,aba_train, type = "numeric")
+
 aba_test_final <-bind_cols(aba_test,aba_test_pred_age, id = NULL)
 
-View(aba_test_final)
+aba_train_final <-bind_cols(aba_train,aba_train_pred_age, id = NULL)
+
+names(aba_train_final)[names(aba_train_final) == '.pred'] <- 'predicted_age'
+
+names(aba_test_final)[names(aba_test_final) == '.pred'] <- 'predicted_age'
+
+aba_metrics(aba_test_final,truth= age, estimate = predicted_age)
+
+aba_metrics(aba_train_final,truth= age, estimate = predicted_age)
 ```
+R^2 value is .522, rmse is 2.174, mae is 1.542
 
