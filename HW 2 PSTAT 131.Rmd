@@ -108,8 +108,11 @@ View(abaF)
 
 aba_metrics <- metric_set(rsq,rmse,mae)
 
+#predicts age from test data
 aba_test_pred_age <- predict(aba_fit,aba_test, type = "numeric")
 
+
+#predicts age from training data
 aba_train_pred_age <- predict(aba_fit,aba_train, type = "numeric")
 
 aba_test_final <-bind_cols(aba_test,aba_test_pred_age, id = NULL)
@@ -120,9 +123,13 @@ names(aba_train_final)[names(aba_train_final) == '.pred'] <- 'predicted_age'
 
 names(aba_test_final)[names(aba_test_final) == '.pred'] <- 'predicted_age'
 
+#produces metrics on our test data
 aba_metrics(aba_test_final,truth= age, estimate = predicted_age)
 
+#produces metrics on our training data
 aba_metrics(aba_train_final,truth= age, estimate = predicted_age)
 ```
-R^2 value is .522, rmse is 2.174, mae is 1.542
+on our testing data: R^2 value is .512, rmse is 2.174, mae is 1.542. This means that 51.2% of variance our data can be explained by our model.
+ 
+on our training data: R^2 value is .563, rmse is 2.149, mae is 1.544. This means that 56.3% of variance our data can be explained by our model.
 
